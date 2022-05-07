@@ -1,0 +1,24 @@
+{% extends "base.html" %} 
+{% block content %}
+<form method="POST">
+    {% for user in userDetails %}
+    <label for="item_name">Name:</label><br>
+    <input type="text" id="item_name" name="item_name" value="{{user[1]}}"><br><br>
+    <label for="episode">Episodes:</label><br>
+    <input type="text" id="episode" name="episode" value="{{user[3]}}"><br><br>
+    <label for="date">Date Released:</label><br>
+    <input type="text" id="date" name="date" placeholder="mm/dd/year" value="{{user[6]}}"><br><br>
+    <label for="source">Source:</label><br>
+    <input type="text" id="source" name="source" value="{{user[7]}}"><br><br>
+    <label for="demographic">demographic:</label><br>
+    <input type="text" id="demographic" name="demographic" value="{{user[8]}}"><br><br>
+    <label for="duration">Duration:</label><br>
+    <input type="text" id="duration" name="duration" value="{{user[9]}}"><br><br>
+    <label for="duration">Poster:</label><br>
+    <input type="text" id="duration" name="poster" value="{{user[10]}}"><br><br>
+    <label for="duration">Trailer:</label><br>
+    <input type="text" id="duration" name="trailer" value="{{user[11]}}"><br><br>
+    <input type="submit" value="Submit">
+    {%endfor%}
+  </form>
+{% endblock %}

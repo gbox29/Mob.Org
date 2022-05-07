@@ -1,0 +1,22 @@
+{% extends "base.html" %} 
+{% block content %}
+<form method="POST">
+    <label for="item_name">Name:</label><br>
+    <input type="text" id="item_name" name="item_name"><br><br>
+    <label for="episode">Episodes:</label><br>
+    <input type="text" id="episode" name="episode" ><br><br>
+    <label for="date">Date Released:</label><br>
+    <input type="text" id="date" name="date" placeholder="mm/dd/year" ><br><br>
+    <label for="source">Source:</label><br>
+    <input type="text" id="source" name="source" ><br><br>
+    <label for="demographic">demographic:</label><br>
+    <input type="text" id="demographic" name="demographic" ><br><br>
+    <label for="duration">Duration:</label><br>
+    <input type="text" id="duration" name="duration" ><br><br>
+    <label for="duration">Poster:</label><br>
+    <input type="text" id="duration" name="poster" ><br><br>
+    <label for="duration">Trailer:</label><br>
+    <input type="text" id="duration" name="trailer" ><br><br>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}
