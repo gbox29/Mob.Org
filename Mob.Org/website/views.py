@@ -2,9 +2,9 @@ from flask import Blueprint, redirect, render_template, request,url_for
 views = Blueprint('views',__name__)
 from . import mysql
 
-@views.route('/')
+@views.route('/admin_base')
 def home():
-    return render_template("base.html")
+    return render_template("admin_base.html")
 @views.route('/add_film', methods=['GET','POST'])
 def add_film():
     cur = mysql.connection.cursor()
@@ -50,8 +50,8 @@ def update_film(id_data):
             poster = request.form['poster']
             trailer = request.form['trailer']
             cur.execute(""" UPDATE t_item SET item_name=%s, episode=%s,date_release=%s,item_source=%s,
-                        demographic=%s,duration=%s,poster=%s,trailer=%s""",
-                        (name,episode,date,source,demographic,duration,poster,trailer))
+                        demographic=%s,duration=%s,poster=%s,trailer=%s WHERE id=%s""",
+                        (name,episode,date,source,demographic,duration,poster,trailer,id_data))
             mysql.connection.commit()
             return redirect(url_for("views.film_table"))
         return render_template("update_film.html",userDetails=userDetails)
