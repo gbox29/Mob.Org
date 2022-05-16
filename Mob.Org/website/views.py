@@ -2,6 +2,20 @@ from flask import Blueprint, redirect, render_template, request,url_for
 views = Blueprint('views',__name__)
 from . import mysql
 
+##user side
+@views.route('/')
+def index():
+    cur = mysql.connection.cursor()
+    resultValue = cur.execute("SELECT * FROM t_item WHERE id = 3")
+    if resultValue > 0:
+        userDetails = cur.fetchall()
+        result = cur.execute("SELECT * FROM t_item LIMIT 5")
+        if result > 0:
+            details = cur.fetchall()
+            return render_template("index.html",userDetails=userDetails,details=details)
+    return render_template("index.html")
+
+##admin side
 @views.route('/admin_base')
 def home():
     return render_template("admin_base.html")
@@ -16,11 +30,13 @@ def add_film():
         source = request.form['source']
         demographic = request.form['demographic']
         duration = request.form['duration']
+        synopsis = request.form['synopsis']
+        background = request.form['background']
         poster = request.form['poster']
         trailer = request.form['trailer']
         cur.execute(""" INSERT INTO 
-                    t_item (item_name,t_type,episode,date_release,item_source,demographic,duration,poster,trailer) 
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) """,(name,type,episode,date,source,demographic,duration,poster,trailer))
+                    t_item (item_name,t_type,episode,date_release,item_source,demographic,duration,synopsis,background,poster,trailer) 
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) """,(name,type,episode,date,source,demographic,duration,synopsis,background,poster,trailer))
         mysql.connection.commit()
         return redirect(url_for("views.film_table"))
     return render_template("add_film.html")
@@ -47,11 +63,13 @@ def update_film(id_data):
             source = request.form['source']
             demographic = request.form['demographic']
             duration = request.form['duration']
+            synopsis = request.form['synopsis']
+            background = request.form['background']
             poster = request.form['poster']
             trailer = request.form['trailer']
             cur.execute(""" UPDATE t_item SET item_name=%s, episode=%s,date_release=%s,item_source=%s,
-                        demographic=%s,duration=%s,poster=%s,trailer=%s WHERE id=%s""",
-                        (name,episode,date,source,demographic,duration,poster,trailer,id_data))
+                        demographic=%s,duration=%s,synopsis=%s,background=%s,poster=%s,trailer=%s WHERE id=%s""",
+                        (name,episode,date,source,demographic,duration,synopsis,background,poster,trailer,id_data))
             mysql.connection.commit()
             return redirect(url_for("views.film_table"))
         return render_template("update_film.html",userDetails=userDetails)
