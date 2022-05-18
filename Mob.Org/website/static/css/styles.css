@@ -67,10 +67,25 @@ body{
 .top-movie-characters{
     grid-row: 5/8;
     display: grid;
-    grid-template-columns: repeat(4,25%);
+    grid-template-rows: 10% 30% 30% 30%;
+    grid-auto-rows: auto;
 }
-.top-movie-characters > div{
-    border: solid;
+.top-movie-characters>div{
+    border: solid 2px;
+}
+.char-info {
+    display: grid;
+    grid-template-columns: repeat(3,5%);
+}
+.top-char-pic{
+    grid-column: 2/4;
+}
+.top-char-info{
+    grid-column: 4/6;
+}
+
+.char-info > div{
+    border: solid 2px;
 }
 .popular-show{
     grid-row: 8/12;

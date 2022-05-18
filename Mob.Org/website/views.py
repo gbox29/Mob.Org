@@ -6,7 +6,7 @@ from . import mysql
 @views.route('/')
 def index():
     cur = mysql.connection.cursor()
-    resultValue = cur.execute("SELECT * FROM t_item WHERE id = 3")
+    resultValue = cur.execute("SELECT * FROM t_item WHERE id = 1")
     if resultValue > 0:
         userDetails = cur.fetchall()
         result = cur.execute("SELECT * FROM t_item LIMIT 5")
