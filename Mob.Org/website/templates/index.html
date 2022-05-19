@@ -1,31 +1,9 @@
-<html>
-    <head>
-        <title>{% block title %}Home{% endblock %}</title>
-        <link href="{{ url_for('static',filename='/css/styles.css') }}" rel="stylesheet" />
-    </head>
-
-    <body>
-      <div class="grid">
-
-        <div class="head-navigation">
-            <ul>
-                <li><h1><a href="#">Mob.Org</a></h1></li>
-                <li><h1><a href="#">Home</a></li>
-                <li><h1><a href="#">Genre</a></li>
-                <li><h1><a href="#">Books</a></li>
-                <li><h1><a href="#">Movies</a></li>
-                    <button type="button" class="button"><li><h1><a href="#">Sign-Up</a></li></button>
-                        <form action="#">
-                            <li style="float: right;"><h1><a href="#">Search</a></li>
-                            <li style="float: right;"><input type="text" id="fname" name="search-bar" style="height: 50px; width: 250px; margin-top: 7px ;"></li>
-                        </form>      
-              </ul>
-        </div>
-   
-        {%include "main-show.html"%}
-        {%include "top-movie-char.html"%}
-        {%include "popular-show.html"%}
-        {%include "top-show.html"%}
+{% extends "user_base.html" %}
+{% block content %}
+    {%include "main-show.html"%}
+    {%include "top-movie-char.html"%}
+    {%include "popular-show.html"%}
+    {%include "top-show.html"%}
 
         <div class="top-books">
             <h1>The Best Books</h1>
@@ -56,10 +34,4 @@
                 </a>
             </div>
         </div>
-
-        <div class="footer">
-            footer
-        </div>
-      </div>
-    </body>
-</html>
+{% endblock %}
