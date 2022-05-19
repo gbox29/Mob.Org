@@ -7,7 +7,7 @@ def login():
 
 @auth.route('/register')
 def register():
-    return "register"
+    return render_template("sign-up.html")
 
 @auth.route('/logout')
 def logout():
