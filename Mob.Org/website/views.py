@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request,url_for
+from flask import Blueprint, redirect, render_template, request, session,url_for
 views = Blueprint('views',__name__)
 from . import mysql
 
@@ -12,8 +12,11 @@ def index():
         result = cur.execute("SELECT * FROM t_item LIMIT 5")
         if result > 0:
             details = cur.fetchall()
+        if 'username' in session:
+            username = "username"
+            return render_template("index.html",userDetails=userDetails,details=details,username=username)
+        else:
             return render_template("index.html",userDetails=userDetails,details=details)
-    return render_template("index.html")
 
 ##admin side
 @views.route('/admin_base')

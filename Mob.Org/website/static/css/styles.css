@@ -255,10 +255,6 @@ ul {
     border-radius: 50%;
   }
   
-  /* Add padding to containers */
-  .login-form {
-    padding: 16px;
-  }
   
   /* The "Forgot password" text */
   span.psw {
