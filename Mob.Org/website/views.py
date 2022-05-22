@@ -18,6 +18,19 @@ def index():
         else:
             return render_template("index.html",userDetails=userDetails,details=details)
 
+
+@views.route('/view_item/<string:id_data>',methods=['GET','POST'])
+def view_item(id_data):
+    cur = mysql.connection.cursor()
+    itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
+    itemDetails = cur.fetchone()
+    if itemDetails:
+        if 'username' in session:
+            username = "username"
+            return render_template("view_item.html",itemDetails=itemDetails,username=username)
+        else:
+            return render_template("view_item.html",itemDetails=itemDetails)
+
 ##admin side
 @views.route('/admin_base')
 def home():
