@@ -25,12 +25,25 @@ def view_item(id_data):
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
-        if 'username' in session:
+        if 'username' and 'user_id' in session:
             username = "username"
+            if request.method == 'POST':
+                status = request.form['status']
+                start_date = request.form['start_date']
+                end_date = request.form['end_date']
+                ep_seen = request.form['ep_seen']
+                rating = request.form['rating']
+                user_id = session['user_id']
+                if ep_seen > itemDetails[3]:
+                    pass
+                else:
+                    cur.execute("""INSERT INTO t_list (user_id,item_id,start_date,end_date,ep_seen,rating,list_status)
+                                    VALUES (%s,%s,%s,%s,%s,%s,%s)""",
+                            (user_id,id_data,start_date,end_date,ep_seen,rating,status))
+                    mysql.connection.commit()
             return render_template("view_item.html",itemDetails=itemDetails,username=username)
         else:
             return render_template("view_item.html",itemDetails=itemDetails)
-
 ##admin side
 @views.route('/admin_base')
 def home():

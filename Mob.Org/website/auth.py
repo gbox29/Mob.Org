@@ -17,8 +17,10 @@ def login():
             session['username'] = resultValue[3]
             if resultValue[5]=='user':
                 return redirect(url_for("views.index"))
-            session['loggedin'] = true
-    return render_template("login.html")
+    else:
+        if 'username' and 'user_id' in session:
+            return redirect(url_for("views.index"))
+        return render_template("login.html")
 
 @auth.route('/register',methods=['GET','POST'])
 def register():

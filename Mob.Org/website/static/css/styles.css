@@ -274,14 +274,13 @@ ul {
       grid-gap: 1em;
   }
   
-  .view-item-body > div{
-      border: solid 2px;
-  }
+
   
   .view-item-info{
       grid-row: 1/4;
       display: grid;
       grid-template-rows: repeat(3,15%);
+      grid-auto-rows: minmax(500px,auto);
       grid-gap: 1em;
   }
   .view-item-info > div{
@@ -290,7 +289,15 @@ ul {
   .view-item-pic{
     grid-row: 1/3;
   }
-
+  .view-item-list{
+      grid-row: 3/5;
+      height: 490px;
+  }
+  .view-item-details{
+      position: relative;
+      bottom: 260px;
+      margin-top: 4%;
+  }
   .view-item-synopsis{
     grid-column: 2/4;
     grid-row: 1/6;
@@ -311,7 +318,14 @@ ul {
   .view-item-review{
       grid-row: 7/9;
   }
+  .view-item-select{
+    display: block; 
+    width: 100%; 
+    height: 10%;
+  }
 
+
+  
 
 
 
