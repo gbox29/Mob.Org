@@ -296,7 +296,7 @@ ul {
   .view-item-details{
       position: relative;
       bottom: 260px;
-      margin-top: 4%;
+      margin-top: 6%;
   }
   .view-item-synopsis{
     grid-column: 2/4;

@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, session,url_for
+from sqlalchemy import true
 views = Blueprint('views',__name__)
 from . import mysql
 
@@ -27,13 +28,13 @@ def view_item(id_data):
     if itemDetails:
         if 'username' and 'user_id' in session:
             username = "username"
+            user_id = session['user_id']
             if request.method == 'POST':
                 status = request.form['status']
                 start_date = request.form['start_date']
                 end_date = request.form['end_date']
                 ep_seen = request.form['ep_seen']
                 rating = request.form['rating']
-                user_id = session['user_id']
                 if ep_seen > itemDetails[3]:
                     pass
                 else:
@@ -41,9 +42,13 @@ def view_item(id_data):
                                     VALUES (%s,%s,%s,%s,%s,%s,%s)""",
                             (user_id,id_data,start_date,end_date,ep_seen,rating,status))
                     mysql.connection.commit()
+            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s",[user_id])
+            listDetails = cur.fetchone()
+            if listDetails:
+                bool_listdetails = "true"
+                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
             return render_template("view_item.html",itemDetails=itemDetails,username=username)
-        else:
-            return render_template("view_item.html",itemDetails=itemDetails)
+        return render_template("view_item.html",itemDetails=itemDetails)
 ##admin side
 @views.route('/admin_base')
 def home():
@@ -53,7 +58,7 @@ def add_film():
     cur = mysql.connection.cursor()
     if request.method == 'POST':
         name = request.form['item_name']
-        type = "film"
+        type = "TV"
         episode = request.form['episode']
         date = request.form['date']
         source = request.form['source']

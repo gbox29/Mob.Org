@@ -3,40 +3,15 @@
     <div class="view-item-body">
         <div class="view-item-info">
             <div class="view-item-pic">
-                <img src="{{itemDetails[12]}}" class="img-list">
+                <img src="{{itemDetails[10]}}" class="img-list">
             </div>
             <div class="view-item-list">
                 <div style="margin:2%">
-                    <form method="POST">
-                        <p style="color: black; margin-left:2%">Add to my list</p>
-                        <label for="status"><b>Status</b></label>
-                        <select name="status" class="view-item-select">
-                            <option value="Plan to watch">Plan to watch</option>
-                            <option value="Watching">Watching</option>
-                            <option value="Completed">Completed</option>
-                          </select>
-                        <label for="start_date"><b>Start Date</b></label>
-                        <input type="text" value="{{itemDetails[6]}}" name="start_date">
-                        <label for="start_date"><b>End Date</b></label>
-                        <input type="text" placeholder="mm/dd/year" name="end_date">
-                        <label for="start_date"><b>Episode Seen</b></label>
-                        <input type="text" placeholder="episode / {{itemDetails[3]}}" name="ep_seen">
-                        <label for="start_date"><b>Rating</b></label>
-                        <select name="rating" class="view-item-select">
-                            <option value="actual value 1">0</option>
-                            <option value="actual value 1">1</option>
-                            <option value="actual value 2">2</option>
-                            <option value="actual value 3">3</option>
-                            <option value="actual value 1">4</option>
-                            <option value="actual value 2">5</option>
-                            <option value="actual value 3">6</option>
-                            <option value="actual value 1">7</option>
-                            <option value="actual value 2">8</option>
-                            <option value="actual value 3">9</option>
-                            <option value="actual value 3">10</option>
-                          </select>
-                        <input type="submit" value="Submit" style="width: 100%; height:10%; margin-top: 4%;">
-                    </form>
+                    {% if bool_listdetails == "true" %}
+                    {%include "view_item_edit.html"%}
+                    {% else %}
+                    {%include "view_item_add.html"%}
+                    {% endif %}
                 </div>
             </div>
             <div class="view-item-details">

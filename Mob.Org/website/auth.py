@@ -17,6 +17,8 @@ def login():
             session['username'] = resultValue[3]
             if resultValue[5]=='user':
                 return redirect(url_for("views.index"))
+        else:
+            return render_template("login.html")
     else:
         if 'username' and 'user_id' in session:
             return redirect(url_for("views.index"))
@@ -30,9 +32,10 @@ def register():
         lname = request.form['lname']
         uname = request.form['uname']
         psw = request.form['psw']
+        user_type  = "user"
         cur.execute(""" INSERT INTO 
-                    t_user (firstname,lastname,user_name,user_password) 
-                    VALUES (%s,%s,%s,%s) """,(fname,lname,uname,psw))
+                    t_user (firstname,lastname,user_name,user_password,user_type) 
+                    VALUES (%s,%s,%s,%s,%s) """,(fname,lname,uname,psw,user_type))
         mysql.connection.commit()
         return redirect(url_for("auth.login"))
     return render_template("sign-up.html")
