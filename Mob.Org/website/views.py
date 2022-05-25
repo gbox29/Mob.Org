@@ -23,6 +23,7 @@ def index():
 @views.route('/view_item/<string:id_data>',methods=['GET','POST'])
 def view_item(id_data):
     cur = mysql.connection.cursor()
+    session['view_id_data'] = id_data
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
@@ -42,13 +43,31 @@ def view_item(id_data):
                                     VALUES (%s,%s,%s,%s,%s,%s,%s)""",
                             (user_id,id_data,start_date,end_date,ep_seen,rating,status))
                     mysql.connection.commit()
-            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s",[user_id])
+            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
                 return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
             return render_template("view_item.html",itemDetails=itemDetails,username=username)
         return render_template("view_item.html",itemDetails=itemDetails)
+
+@views.route('/view_edit_item',methods=['GET','POST'])
+def test():
+    cur = mysql.connection.cursor()
+    if 'view_id_data' and 'username' and 'user_id'in session:
+        id_data = session['view_id_data']
+        user_id = session['user_id']
+        if request.method == 'POST':
+            status = request.form['status']
+            start_date = request.form['start_date']
+            end_date = request.form['end_date']
+            ep_seen = request.form['ep_seen']
+            rating = request.form['rating']
+            cur.execute(""" UPDATE t_list SET start_date=%s, end_date=%s, ep_seen=%s, rating=%s, list_status=%s WHERE user_id=%s AND item_id=%s"""
+                                    ,(start_date,end_date,ep_seen,rating,status,user_id,id_data))
+            mysql.connection.commit()
+            return redirect(url_for("views.view_item",id_data = id_data))
+    
 ##admin side
 @views.route('/admin_base')
 def home():
