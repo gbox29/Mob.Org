@@ -52,7 +52,7 @@ def view_item(id_data):
         return render_template("view_item.html",itemDetails=itemDetails)
 
 @views.route('/view_edit_item',methods=['GET','POST'])
-def test():
+def view_edit_item():
     cur = mysql.connection.cursor()
     if 'view_id_data' and 'username' and 'user_id'in session:
         id_data = session['view_id_data']
@@ -67,7 +67,17 @@ def test():
                                     ,(start_date,end_date,ep_seen,rating,status,user_id,id_data))
             mysql.connection.commit()
             return redirect(url_for("views.view_item",id_data = id_data))
-    
+
+@views.route('/view_all_review',methods=['GET','POST'])
+def view_all_review():
+    cur = mysql.connection.cursor()
+    id_data = session['view_id_data']
+    view_all_review = "true"
+    itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
+    itemDetails = cur.fetchone()
+    if itemDetails:
+        return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails)
+
 ##admin side
 @views.route('/admin_base')
 def home():
