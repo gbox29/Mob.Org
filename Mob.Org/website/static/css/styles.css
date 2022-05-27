@@ -356,8 +356,40 @@ ul {
       grid-row: 11/15;
   }
 
+  .view-all-review-container{
+    border: solid 2px;
+    grid-column: 2/5;
+    grid-row: 1/5;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-gap: 1em;
+    grid-auto-rows: auto;
+  }
+  .view-all-review-container > div{
+      border: solid 2px;
+      margin: 2%;
+  }
+  .add-review{
+      grid-column: 1/3;
+      top: 0%;
+  }
+  .w3review{
+      margin: 2%;
+      height: 70%;
+  }
+  .review_date{
+      margin: 2%;
+  }
+  .submit-review-btn{
+      margin: 2%;
+      height: 5%;
+      width: 95%;
+  }
+  textarea{
+      resize: none;
+  }
 
-  
+
 
 
 
