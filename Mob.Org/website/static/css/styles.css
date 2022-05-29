@@ -372,6 +372,7 @@ ul {
   .add-review{
       grid-column: 1/3;
       top: 0%;
+      display: grid;
   }
   .w3review{
       margin: 2%;
@@ -387,6 +388,11 @@ ul {
   }
   textarea{
       resize: none;
+  }
+
+  #all-review-container{
+      height: 80%;
+      height: 650px;
   }
 
 

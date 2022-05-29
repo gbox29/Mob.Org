@@ -76,7 +76,44 @@ def view_all_review():
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
-        return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails)
+        reviewDetails = cur.execute("SELECT * FROM t_review WHERE item_id = %s",(id_data))
+        if reviewDetails > 0:
+            reviewDetails = cur.fetchall()
+        if 'username' and 'user_id' in session:
+            username = "username"
+            user_id = session['user_id']
+            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
+            listDetails = cur.fetchone()
+            if listDetails:
+                bool_listdetails = "true"
+                return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,reviewDetails=reviewDetails)
+        else:  
+            return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,reviewDetails=reviewDetails)
+
+@views.route('/add_review', methods=['GET','POST'])
+def add_review():
+    cur = mysql.connection.cursor()
+    id_data = session['view_id_data']
+    itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
+    itemDetails = cur.fetchone()
+    if itemDetails:
+        if 'view_id_data' and 'username' and 'user_id' in session:
+            username = "username"
+            user_id = session['user_id']
+            if request.method == 'POST':
+                review_date = request.form['review_date']
+                add_review = request.form['add_review']
+                cur.execute(""" INSERT INTO t_review (user_id,item_id,r_date,rv_description) VALUES (%s,%s,%s,%s)""",
+                                (user_id,id_data,review_date,add_review))
+                mysql.connection.commit()
+            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
+            listDetails = cur.fetchone()
+            if listDetails:
+                bool_listdetails = "true"
+                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
+        else:
+            return render_template("login.html")
+        
 
 ##admin side
 @views.route('/admin_base')

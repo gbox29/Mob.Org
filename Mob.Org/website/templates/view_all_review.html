@@ -1,25 +1,71 @@
 <div class="view-all-review-container">
     <div class="add-review">
-        <form action="#">
+        <form action="/add_review" method="POST">
             <div class="review_date">
                 <label for="birthday">Choose a date:</label>
                 <input type="date" id="birthday" name="review_date">
             </div>
             <div class="enter_review">
                 <p style="color: black; margin: 2%;"><label for="w3review">Review of W3Schools:</label></p>
-                <textarea class="w3review" name="w3review" rows="4" cols="100"></textarea>
+                <textarea class="w3review" name="add_review" rows="4" cols="100" style="width: 95%;"></textarea>
             </div>
             <input class="submit-review-btn" type="submit" name="submit">
           </form>
     </div>
-    <div class="view-all-review">1</div>
-    <div class="view-all-review">2</div>
-    <div class="view-all-review">3</div>
-    <div class="view-all-review">4</div>
-    <div class="view-all-review">5</div>
-    <div class="view-all-review">6</div>
-    <div class="view-all-review">3</div>
-    <div class="view-all-review">4</div>
-    <div class="view-all-review">5</div>
-    <div class="view-all-review">6</div>
+    {%for user_review in reviewDetails%}
+    <div class="view-all-review">
+        <h1 style="margin-left:1%;">Username</h1>
+        <p style="color: black; margin-left: 1%;">{{user_review[3]}}</p>
+        <div class="review-container" id="all-review-container">
+            <p style="color: black;">
+                {{user_review[4]}}
+            </p>
+        </div>
+    </div>
+    {%endfor%}
+    <div class="view-all-review">
+        <h1 style="margin-left:1%;">Username</h1>
+        <p style="color: black; margin-left: 1%;">May/05/2022</p>
+        <div class="review-container" id="all-review-container">
+            <p style="color: black;">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, quibusdam ex. Veritatis vitae quisquam accusantium iure impedit, culpa dolores soluta, tempore perspiciatis repudiandae suscipit, laboriosam delectus error consequatur eum dolorem! Quidem quasi corrupti tempora qui distinctio aliquam eum rem veritatis repellendus error quod eius, optio voluptates, obcaecati facere quos sint est molestiae exercitationem dignissimos aliquid veniam mollitia labore. Vitae ipsum ipsam, iure rerum provident maxime aspernatur qui, excepturi recusandae quasi numquam atque adipisci sit? Rem explicabo maxime soluta quo accusamus nisi nobis voluptas animi esse amet. Illum dicta quam cumque. Quo quia placeat dignissimos totam molestias, minus ratione ipsum enim reprehenderit et, quod maiores nisi, ea officiis vel earum? Placeat, repellendus, dolore enim magnam modi debitis ad quo quos voluptates ex id sunt delectus inventore alias aliquam consequuntur consectetur totam. Odio obcaecati sapiente quo debitis beatae, voluptas veritatis suscipit nemo omnis error corporis architecto culpa neque tempore reiciendis perspiciatis veniam! Nesciunt voluptates enim perspiciatis. Voluptatum, quam officiis quis totam earum, mollitia, ab laudantium reprehenderit natus odit laboriosam maxime exercitationem est quae autem. Deleniti, iste veniam sint doloremque optio sit ipsum eaque a eveniet nam atque inventore at dolorem. Dignissimos modi repellat rerum reiciendis officiis dolor quidem, repellendus reprehenderit aliquid sunt.
+            </p>
+        </div>
+    </div>
+    <div class="view-all-review">
+        <h1 style="margin-left:1%;">Username</h1>
+        <p style="color: black; margin-left: 1%;">May/05/2022</p>
+        <div class="review-container" id="all-review-container">
+            <p style="color: black;">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, quibusdam ex. Veritatis vitae quisquam accusantium iure impedit, culpa dolores soluta, tempore perspiciatis repudiandae suscipit, laboriosam delectus error consequatur eum dolorem! Quidem quasi corrupti tempora qui distinctio aliquam eum rem veritatis repellendus error quod eius, optio voluptates, obcaecati facere quos sint est molestiae exercitationem dignissimos aliquid veniam mollitia labore. Vitae ipsum ipsam, iure rerum provident maxime aspernatur qui, excepturi recusandae quasi numquam atque adipisci sit? Rem explicabo maxime soluta quo accusamus nisi nobis voluptas animi esse amet. Illum dicta quam cumque. Quo quia placeat dignissimos totam molestias, minus ratione ipsum enim reprehenderit et, quod maiores nisi, ea officiis vel earum? Placeat, repellendus, dolore enim magnam modi debitis ad quo quos voluptates ex id sunt delectus inventore alias aliquam consequuntur consectetur totam. Odio obcaecati sapiente quo debitis beatae, voluptas veritatis suscipit nemo omnis error corporis architecto culpa neque tempore reiciendis perspiciatis veniam! Nesciunt voluptates enim perspiciatis. Voluptatum, quam officiis quis totam earum, mollitia, ab laudantium reprehenderit natus odit laboriosam maxime exercitationem est quae autem. Deleniti, iste veniam sint doloremque optio sit ipsum eaque a eveniet nam atque inventore at dolorem. Dignissimos modi repellat rerum reiciendis officiis dolor quidem, repellendus reprehenderit aliquid sunt.
+            </p>
+        </div>
+    </div>
+    <div class="view-all-review">
+        <h1 style="margin-left:1%;">Username</h1>
+        <p style="color: black; margin-left: 1%;">May/05/2022</p>
+        <div class="review-container" id="all-review-container">
+            <p style="color: black;">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, quibusdam ex. Veritatis vitae quisquam accusantium iure impedit, culpa dolores soluta, tempore perspiciatis repudiandae suscipit, laboriosam delectus error consequatur eum dolorem! Quidem quasi corrupti tempora qui distinctio aliquam eum rem veritatis repellendus error quod eius, optio voluptates, obcaecati facere quos sint est molestiae exercitationem dignissimos aliquid veniam mollitia labore. Vitae ipsum ipsam, iure rerum provident maxime aspernatur qui, excepturi recusandae quasi numquam atque adipisci sit? Rem explicabo maxime soluta quo accusamus nisi nobis voluptas animi esse amet. Illum dicta quam cumque. Quo quia placeat dignissimos totam molestias, minus ratione ipsum enim reprehenderit et, quod maiores nisi, ea officiis vel earum? Placeat, repellendus, dolore enim magnam modi debitis ad quo quos voluptates ex id sunt delectus inventore alias aliquam consequuntur consectetur totam. Odio obcaecati sapiente quo debitis beatae, voluptas veritatis suscipit nemo omnis error corporis architecto culpa neque tempore reiciendis perspiciatis veniam! Nesciunt voluptates enim perspiciatis. Voluptatum, quam officiis quis totam earum, mollitia, ab laudantium reprehenderit natus odit laboriosam maxime exercitationem est quae autem. Deleniti, iste veniam sint doloremque optio sit ipsum eaque a eveniet nam atque inventore at dolorem. Dignissimos modi repellat rerum reiciendis officiis dolor quidem, repellendus reprehenderit aliquid sunt.
+            </p>
+        </div>
+    </div>
+    <div class="view-all-review">
+        <h1 style="margin-left:1%;">Username</h1>
+        <p style="color: black; margin-left: 1%;">May/05/2022</p>
+        <div class="review-container" id="all-review-container">
+            <p style="color: black;">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, quibusdam ex. Veritatis vitae quisquam accusantium iure impedit, culpa dolores soluta, tempore perspiciatis repudiandae suscipit, laboriosam delectus error consequatur eum dolorem! Quidem quasi corrupti tempora qui distinctio aliquam eum rem veritatis repellendus error quod eius, optio voluptates, obcaecati facere quos sint est molestiae exercitationem dignissimos aliquid veniam mollitia labore. Vitae ipsum ipsam, iure rerum provident maxime aspernatur qui, excepturi recusandae quasi numquam atque adipisci sit? Rem explicabo maxime soluta quo accusamus nisi nobis voluptas animi esse amet. Illum dicta quam cumque. Quo quia placeat dignissimos totam molestias, minus ratione ipsum enim reprehenderit et, quod maiores nisi, ea officiis vel earum? Placeat, repellendus, dolore enim magnam modi debitis ad quo quos voluptates ex id sunt delectus inventore alias aliquam consequuntur consectetur totam. Odio obcaecati sapiente quo debitis beatae, voluptas veritatis suscipit nemo omnis error corporis architecto culpa neque tempore reiciendis perspiciatis veniam! Nesciunt voluptates enim perspiciatis. Voluptatum, quam officiis quis totam earum, mollitia, ab laudantium reprehenderit natus odit laboriosam maxime exercitationem est quae autem. Deleniti, iste veniam sint doloremque optio sit ipsum eaque a eveniet nam atque inventore at dolorem. Dignissimos modi repellat rerum reiciendis officiis dolor quidem, repellendus reprehenderit aliquid sunt.
+            </p>
+        </div>
+    </div>
+    <div class="view-all-review">
+        <h1 style="margin-left:1%;">Username</h1>
+        <p style="color: black; margin-left: 1%;">May/05/2022</p>
+        <div class="review-container" id="all-review-container">
+            <p style="color: black;">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, quibusdam ex. Veritatis vitae quisquam accusantium iure impedit, culpa dolores soluta, tempore perspiciatis repudiandae suscipit, laboriosam delectus error consequatur eum dolorem! Quidem quasi corrupti tempora qui distinctio aliquam eum rem veritatis repellendus error quod eius, optio voluptates, obcaecati facere quos sint est molestiae exercitationem dignissimos aliquid veniam mollitia labore. Vitae ipsum ipsam, iure rerum provident maxime aspernatur qui, excepturi recusandae quasi numquam atque adipisci sit? Rem explicabo maxime soluta quo accusamus nisi nobis voluptas animi esse amet. Illum dicta quam cumque. Quo quia placeat dignissimos totam molestias, minus ratione ipsum enim reprehenderit et, quod maiores nisi, ea officiis vel earum? Placeat, repellendus, dolore enim magnam modi debitis ad quo quos voluptates ex id sunt delectus inventore alias aliquam consequuntur consectetur totam. Odio obcaecati sapiente quo debitis beatae, voluptas veritatis suscipit nemo omnis error corporis architecto culpa neque tempore reiciendis perspiciatis veniam! Nesciunt voluptates enim perspiciatis. Voluptatum, quam officiis quis totam earum, mollitia, ab laudantium reprehenderit natus odit laboriosam maxime exercitationem est quae autem. Deleniti, iste veniam sint doloremque optio sit ipsum eaque a eveniet nam atque inventore at dolorem. Dignissimos modi repellat rerum reiciendis officiis dolor quidem, repellendus reprehenderit aliquid sunt.
+            </p>
+        </div>
+    </div>
 </div>
