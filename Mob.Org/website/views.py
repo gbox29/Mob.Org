@@ -24,6 +24,8 @@ def index():
 def view_item(id_data):
     cur = mysql.connection.cursor()
     session['view_id_data'] = id_data
+    revDetails = cur.execute("SELECT * FROM user_review WHERE item_id =%s LIMIT 4",(id_data))
+    revDetails = cur.fetchall()
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
@@ -47,9 +49,9 @@ def view_item(id_data):
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
-                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
-            return render_template("view_item.html",itemDetails=itemDetails,username=username)
-        return render_template("view_item.html",itemDetails=itemDetails)
+                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails)
+            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails)
+        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails)
 
 @views.route('/view_edit_item',methods=['GET','POST'])
 def view_edit_item():
@@ -76,7 +78,7 @@ def view_all_review():
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
-        reviewDetails = cur.execute("SELECT * FROM t_review WHERE item_id = %s",(id_data))
+        reviewDetails = cur.execute("SELECT * FROM user_review WHERE item_id = %s",(id_data))
         if reviewDetails > 0:
             reviewDetails = cur.fetchall()
             if 'username' and 'user_id' in session:
@@ -104,23 +106,29 @@ def view_all_review():
 def add_review():
     cur = mysql.connection.cursor()
     id_data = session['view_id_data']
+    ##revDetails = cur.execute("SELECT * FROM user_review WHERE item_id =%s LIMIT 4",(id_data))
+    ##revDetails = cur.fetchall()
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
         if 'view_id_data' and 'username' and 'user_id' in session:
             username = "username"
             user_id = session['user_id']
-            if request.method == 'POST':
-                review_date = request.form['review_date']
-                add_review = request.form['add_review']
-                cur.execute(""" INSERT INTO t_review (user_id,item_id,r_date,rv_description) VALUES (%s,%s,%s,%s)""",
-                                (user_id,id_data,review_date,add_review))
-                mysql.connection.commit()
             listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
-                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
+                if request.method == 'POST':
+                    review_date = request.form['review_date']
+                    add_review = request.form['add_review']
+                    cur.execute(""" INSERT INTO t_review (user_id,item_id,r_date,rv_description) VALUES (%s,%s,%s,%s)""",
+                                    (user_id,id_data,review_date,add_review))
+                    mysql.connection.commit()
+                ##return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails)
+                return redirect(url_for("views.view_item",id_data = id_data))
+            else:
+                ## need to be revised tommorow
+                return render_template("login.html")
         else:
             return render_template("login.html")
         

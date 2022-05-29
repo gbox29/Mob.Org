@@ -354,6 +354,20 @@ ul {
   }
   .view-item-rec{
       grid-row: 11/15;
+      display: grid;
+      grid-template-columns: repeat(9,10%);
+  }
+  .user-rec{
+      grid-column: 1/11;
+      height: 20%;
+      border: solid 2px;
+  }
+  .rec-content{
+      border: solid 2px;
+      position: relative;
+      left: 50%;
+      bottom: 50%;
+      margin-left: 1em;
   }
 
   .view-all-review-container{
@@ -363,7 +377,7 @@ ul {
     display: grid;
     grid-template-columns: repeat(4,1fr);
     grid-gap: 1em;
-    grid-auto-rows: auto;
+    grid-auto-rows: 50%
   }
   .view-all-review-container > div{
       border: solid 2px;

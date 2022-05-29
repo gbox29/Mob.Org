@@ -1,5 +1,4 @@
 from flask import Blueprint, redirect, render_template, request, session,url_for
-from sqlalchemy import true
 auth = Blueprint('auth',__name__)
 from . import mysql
 
