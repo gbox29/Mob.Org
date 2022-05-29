@@ -79,17 +79,27 @@ def view_all_review():
         reviewDetails = cur.execute("SELECT * FROM t_review WHERE item_id = %s",(id_data))
         if reviewDetails > 0:
             reviewDetails = cur.fetchall()
-        if 'username' and 'user_id' in session:
-            username = "username"
-            user_id = session['user_id']
-            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
-            listDetails = cur.fetchone()
-            if listDetails:
-                bool_listdetails = "true"
-                return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,reviewDetails=reviewDetails)
-        else:  
+            if 'username' and 'user_id' in session:
+                username = "username"
+                user_id = session['user_id']
+                listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
+                listDetails = cur.fetchone()
+                if listDetails:
+                    bool_listdetails = "true"
+                    return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,reviewDetails=reviewDetails)
             return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,reviewDetails=reviewDetails)
+        else:
+            if 'username' and 'user_id' in session:
+                username = "username"
+                user_id = session['user_id']
+                listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
+                listDetails = cur.fetchone()
+                if listDetails:
+                    bool_listdetails = "true"
+                    return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
+            return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails)
 
+            
 @views.route('/add_review', methods=['GET','POST'])
 def add_review():
     cur = mysql.connection.cursor()
