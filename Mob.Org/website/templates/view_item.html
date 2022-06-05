@@ -15,11 +15,15 @@
                 </div>
             </div>
             <div class="view-item-details">
-                
+                asd
             </div>
         </div>
                 {% if view_all_review == "true" %}
                 {%include "view_all_review.html"%}
+                {% elif view_all_rec == "true" %}
+                {%include "view_all_rec.html"%}
+                {% elif add_rec == "true" %}
+                {%include "add_recommendation.html"%}
                 {% else %}
                 {%include "view_item_body.html"%}
                 {% endif %}

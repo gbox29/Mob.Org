@@ -1,0 +1,28 @@
+<div class="add-rec-content">
+    <form action="/add_rec" method="POST">
+        <div class="add-rec-label">
+            <h1>Recommend similar item</h1>
+        </div>
+        <div class="add-rec-container" id="add-rec-container-1">
+            <h3>Choose item in the list:</h3>
+            <select name="rec_list" id="cars" style="display: block; width: 100%; height: 50px;">
+                {%for rec_list in recDetails%}
+                <option value="{{rec_list[0]}}">{{rec_list[3]}}</option>
+                {%endfor%}
+            </select>
+            <h3>Why is it similar?</h3>
+            <textarea id="w3review" name="txtarea_rec" rows="25" cols="50" style="width:100%">
+                At w3schools.com you will learn how to make a website. They offer free tutorials in all web development technologies.
+            </textarea>
+            <input type="submit" value="Add Recommendation" class="rec-submit">
+        </div>
+        <div class="add-rec-container" id="add-rec-container-2">
+            <h3>Tips and Guidelines:</h3>
+            <p>a) Full guidelines available here</p>
+            <p>b) English recommendations only.</p>
+            <p>c) Recommendations should contain persuasive arguments based on opinion and not solely on fact.</p>
+            <p>d) No spoilers.</p>
+            <p>e) All recommendations are public.</p>
+        </div>
+    </form>
+</div>

@@ -1,3 +1,5 @@
+from tabnanny import check
+from tkinter.tix import CheckList
 from flask import Blueprint, redirect, render_template, request, session,url_for
 from sqlalchemy import true
 views = Blueprint('views',__name__)
@@ -26,6 +28,8 @@ def view_item(id_data):
     session['view_id_data'] = id_data
     revDetails = cur.execute("SELECT * FROM user_review WHERE item_id =%s LIMIT 4",(id_data))
     revDetails = cur.fetchall()
+    recDetails = cur.execute("SELECT similar_item_id,poster,count(user_id) FROM rec_list WHERE item_id=%s AND similar_item_id IS NOT NULL LIMIT 9",(id_data))
+    recDetails = cur.fetchall()
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
@@ -44,14 +48,16 @@ def view_item(id_data):
                     cur.execute("""INSERT INTO t_list (user_id,item_id,start_date,end_date,ep_seen,rating,list_status)
                                     VALUES (%s,%s,%s,%s,%s,%s,%s)""",
                             (user_id,id_data,start_date,end_date,ep_seen,rating,status))
+                    cur.execute("""INSERT INTO t_recommend (user_id,item_id)
+                                    VALUES (%s,%s)""",(user_id,id_data,))
                     mysql.connection.commit()
             listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
                 return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails)
-            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails)
-        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails)
+            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails)
+        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails,recDetails=recDetails)
 
 @views.route('/view_edit_item',methods=['GET','POST'])
 def view_edit_item():
@@ -131,12 +137,74 @@ def add_review():
                 return render_template("login.html")
         else:
             return render_template("login.html")
-        
 
+@views.route('/view_all_rec')
+def view_all_rec():
+    cur = mysql.connection.cursor()
+    view_all_rec = "true"
+    id_data = session['view_id_data']
+    itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
+    itemDetails = cur.fetchone()
+    if itemDetails:
+        if 'view_id_data' and 'username' and 'user_id' in session:
+            user_id = session['user_id']
+            username = "username"
+            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
+            listDetails = cur.fetchone()
+            if listDetails:
+                bool_listdetails = "true"
+                return render_template("view_item.html",
+                    view_all_rec=view_all_rec,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
+        return render_template("view_item.html",view_all_rec=view_all_rec,itemDetails=itemDetails)
+
+@views.route('/add_recommendation',methods=['GET','POST'])
+def add_recommendation():
+    cur = mysql.connection.cursor()
+    add_rec = "true"
+    id_data = session['view_id_data']
+    itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
+    itemDetails = cur.fetchone()
+    if itemDetails:
+        if 'view_id_data' and 'username' and 'user_id' in session:
+            user_id = session['user_id']
+            username = "username"
+            recDetails = cur.execute("SELECT * FROM rec_list WHERE user_id=%s AND NOT(item_id=%s)",(user_id,id_data))
+            recDetails = cur.fetchall()
+            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
+            listDetails = cur.fetchone()
+            if listDetails:
+                bool_listdetails = "true"
+                return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
+        else:
+            return render_template("login.html")
+        return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username)
+
+@views.route('/add_rec',methods=['GET','POST'])
+def add_rec():
+    cur = mysql.connection.cursor()
+    complete = "Completed"
+    watching = "Watching"
+    id_data = session['view_id_data']
+    if 'view_id_data' and 'username' and 'user_id' in session:
+        user_id = session['user_id']
+        username = "username"
+        if request.method == 'POST':
+            rec_list = request.form['rec_list']
+            txtarea_rec = request.form['txtarea_rec']
+            cur.execute(""" INSERT INTO t_recommend (user_id,item_id,similar_item_id,r_description) VALUES (%s,%s,%s,%s)""",
+                                            (user_id,id_data,rec_list,txtarea_rec))
+            chklist = cur.execute("SELECT * FROM t_list WHERE (user_id=%s AND item_id=%s) AND (list_status=%s OR list_status=%s)"
+                                            ,(user_id,id_data,complete,watching))
+            if chklist > 0:
+                mysql.connection.commit()
+                return redirect(url_for("views.view_item",id_data = id_data))
+            else:
+                return  "error"
 ##admin side
 @views.route('/admin_base')
 def home():
     return render_template("admin_base.html")
+    
 @views.route('/add_film', methods=['GET','POST'])
 def add_film():
     cur = mysql.connection.cursor()

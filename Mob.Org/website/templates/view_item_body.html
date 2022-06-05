@@ -37,33 +37,12 @@
     <div class="view-item-rec">
         <div class="user-rec">
             <h1 style="margin-left:1%;">User Recommendation</h1>
-            <h1 style="display: inline; margin-left: 70%;"><a href="#">see more</a></h1>
+            <h1 style="display: inline; margin-left: 70%;"><a href="/view_all_rec">see more</a></h1>
         </div>
+        {%for user_rec in recDetails%}
         <div class="rec-content">
-            1
+            <img src="{{user_rec[1]}}">
+            <p class="rev-p">{{user_rec[2]}} Recommendation</p>
         </div>
-        <div class="rec-content">
-            2
-        </div>
-        <div class="rec-content">
-            3
-        </div>
-        <div class="rec-content">
-            4
-        </div>
-        <div class="rec-content">
-            5
-        </div>
-        <div class="rec-content">
-            1
-        </div>
-        <div class="rec-content">
-            1
-        </div>
-        <div class="rec-content">
-            1
-        </div>
-        <div class="rec-content">
-            1
-        </div>
+        {%endfor%}
     </div>
