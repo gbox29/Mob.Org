@@ -39,10 +39,11 @@
             <h1 style="margin-left:1%;">User Recommendation</h1>
             <h1 style="display: inline; margin-left: 70%;"><a href="/view_all_rec">see more</a></h1>
         </div>
-        {%for user_rec in recDetails%}
+        {%for user_rec in recDetailsFour%}
         <div class="rec-content">
-            <img src="{{user_rec[1]}}">
-            <p class="rev-p">{{user_rec[2]}} Recommendation</p>
+            <img src="{{user_rec[0]}}">
+            <p class="rev-p"></p>
         </div>
         {%endfor%}
+
     </div>

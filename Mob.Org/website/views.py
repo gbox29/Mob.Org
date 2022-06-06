@@ -28,8 +28,13 @@ def view_item(id_data):
     session['view_id_data'] = id_data
     revDetails = cur.execute("SELECT * FROM user_review WHERE item_id =%s LIMIT 4",(id_data))
     revDetails = cur.fetchall()
-    recDetails = cur.execute("SELECT similar_item_id,poster,count(user_id) FROM rec_list WHERE item_id=%s AND similar_item_id IS NOT NULL LIMIT 9",(id_data))
+    recDetailsFour = cur.execute("SELECT poster FROM t_item WHERE id in (SELECT item_id FROM t_recommend WHERE id in (SELECT id FROM t_recommend WHERE id IN (SELECT similar_item_id FROM t_recommend WHERE item_id = %s AND similar_item_id IS NOT NULL) AND similar_item_id IS NULL) AND similar_item_id IS NULL);",(id_data))
+    recDetailsFour = cur.fetchall()
+
+
+    recDetails = cur.execute("SELECT * FROM rec_list WHERE item_id=%s AND similar_item_id IS NOT NULL LIMIT 9",(id_data))
     recDetails = cur.fetchall()
+
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
@@ -56,8 +61,9 @@ def view_item(id_data):
             if listDetails:
                 bool_listdetails = "true"
                 return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails)
-            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails)
-        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails,recDetails=recDetails)
+            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour)
+        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour)
+
 
 @views.route('/view_edit_item',methods=['GET','POST'])
 def view_edit_item():
