@@ -1,26 +1,33 @@
 {% extends "admin_base.html" %} 
-{% block content %}
-<form method="POST">
-    <label for="item_name">Name:</label><br>
-    <input type="text" id="item_name" name="item_name"><br><br>
-    <label for="episode">Episodes:</label><br>
-    <input type="text" id="episode" name="episode" ><br><br>
-    <label for="date">Date Released:</label><br>
-    <input type="text" id="date" name="date" placeholder="mm/dd/year" ><br><br>
-    <label for="source">Source:</label><br>
-    <input type="text" id="source" name="source" ><br><br>
-    <label for="demographic">demographic:</label><br>
-    <input type="text" id="demographic" name="demographic" ><br><br>
-    <label for="duration">Duration:</label><br>
-    <input type="text" id="duration" name="duration" ><br><br>
-    <label for="duration">Synopsis:</label><br>
-    <input type="text" id="duration" name="synopsis" ><br><br>
-    <label for="duration">Background:</label><br>
-    <input type="text" id="duration" name="background" value="No background information has been added to this title."><br><br>
-    <label for="duration">Poster:</label><br>
-    <input type="text" id="duration" name="poster" ><br><br>
-    <label for="duration">Trailer:</label><br>
-    <input type="text" id="duration" name="trailer" ><br><br>
-    <input type="submit" value="Submit" height="100">
+{% block content%}
+<form class="add_film-container row container-fluid" method="POST">
+    <div class="row col-lg-6">
+      <p class="col-md-3" for="item_name">Title:</p>
+      <input class="col-md-9" type="text" id="item_name" name="item_name"><br><br>
+      <p class="col-md-3" for="episode">Episodes:</p>
+      <input class="col-md-9" type="text" id="episode" name="episode"><br><br>
+      <p class="col-md-3" for="date">Date Released:</p>
+      <input class="col-md-9" type="datetime-local" id="date" name="date"><br><br>
+      <p class="col-md-3" for="source">Source:</p>
+      <input class="col-md-9" type="text" id="source" name="source" ><br><br>
+      <p class="col-md-3" for="demographic">Demographic:</p>
+      <input class="col-md-9" type="text" id="demographic" name="demographic" ><br><br>
+      <p class="col-md-3" for="duration">Duration:</p>
+      <input class="col-md-9" type="text" id="duration" name="duration" ><br><br>
+      <p class="col-md-3" for="duration">Background:</p>
+      <input class="col-md-9" type="text" id="duration" name="background" ><br><br>
+      <p class="col-md-3" for="duration">Poster:</p>
+      <input class="col-md-9" type="text" id="duration" name="poster"  placeholder="https"><br><br>
+      <p class="col-md-3" for="duration">Trailer:</p>
+      <input class="col-md-9" type="text" id="duration" name="trailer"  placeholder="https"><br><br>
+    </div>
+    <div class="col-lg-6 row">
+      <p class="">Synopsis:</p><br/>
+      <div class="col-lg-12 md-form mb-4 pink-textarea active-pink-textarea">
+        <textarea name="synopsis" class="md-textarea form-control" rows="10"></textarea>
+      </div>
+      <input class="col-md-12 add_film-btn" type="submit" value="Submit" height="100">
+    </div>
+
   </form>
 {% endblock %}

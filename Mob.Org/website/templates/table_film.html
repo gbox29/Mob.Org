@@ -1,40 +1,43 @@
 {% extends "admin_base.html" %} 
 {% block content %}
-<table>
+<table class="table">
+    {%for item in userDetails%}
     <tr>
-        <th>id</th>
-        <th>item_name</th>
-        <th>type</th>
-        <th>episode</th>
-        <th>date_relased</th>
-        <th>source</th>
-        <th>demographic</th>
-        <th>duration</th>
-        <th>synopsis</th>
-        <th>background</th>
-        <th>poster</th>
-        <th>trailer</th>
-        <th colspan="3" style="text-align: center;">Action</th>
-    </tr>
-    {%for user in userDetails%}
-    <tr>
-        <td>{{user[0]}}</td>
-        <td>{{user[1]}}</td>
-        <td>{{user[2]}}</td>
-        <td>{{user[3]}}</td>
-        <td>{{user[6]}}</td>
-        <td>{{user[7]}}</td>
-        <td>{{user[8]}}</td>
-        <td>{{user[9]}}</td>
-        <td>{{user[10]}}</td>
-        <td>{{user[11]}}</td>
-        <td>{{user[12]}}</td>
-        <td>{{user[13]}}</td>
-        <td><a href="/update_film/{{user[0]}}">update</a></td>
-        <td><a href="/delete_film/{{user[0]}}">delete</a></td>
-        <td><a href="#">characters</a></td>
+        <td class="table-item-container row">
+            <div class="table-item-poster col-lg-3 col-sm-12 row">            
+                <img class="col-sm-6 col-lg-12" src="{{item[10]}}" alt="{{item[5]}} Poster" >
+                <iframe class="col-sm-6 col-lg-12" width="inherit" height="inherit" src="{{item[11]}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                        
+            </div>
+            <div class="card-body col-lg-6 col-sm-12">
+                <h3 class="card-title">{{item[0]}}. {{item[1]}}</h5>
+                <h5 class="card-title">Synopsis: </h5>
+                <p class="card-text">{{item[8]}}</p>
+                <h2 class="card-title">Background: </h5>
+                <p class="card-text">{{item[9]}}</p>
+              </div>
+              <ul class="list-group list-group-flush col-lg-3 col-sm-6">
+                <li class="list-group-item">Type: {{item[2]}}</li>
+                <li class="list-group-item">Episode: {{item[3]}}</li>
+                <li class="list-group-item">Date Released: {{item[4]}}</li>
+                <li class="list-group-item">Source: {{item[5]}}</li>
+                <li class="list-group-item">Demographic: {{item[6]}}</li>
+                <li class="list-group-item">Duration: {{item[7]}}</li>
+                <a class="table-char-btn list-group-item" href="/film_table/{{item[0]}}/characters">Characters</a>
+                <a class="table-char-btn list-group-item" href="/film_table/{{item[0]}}/directors">Directors</a>
+                <li class="list-group-item item-action-container">
+                    <a class="table-update-btn" href="/update_film/{{item[0]}}">
+                        <i class="fa-solid fa-file-pen fa-4x"></i>
+                    </a>
+                    <a class="table-delete-btn fa-4x " href="/delete_film/{{item[0]}}" >
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </td>
     </tr>
     {%endfor%}
-</table>   
+</table>    
+
 {% endblock %}
    

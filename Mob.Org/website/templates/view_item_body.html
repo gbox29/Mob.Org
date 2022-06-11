@@ -42,7 +42,9 @@
         {%for user_rec in recDetailsFour%}
         <div class="rec-content">
             <img src="{{user_rec[0]}}">
-            <p class="rev-p"></p>
+            {%for user_count in recDetails%}
+            <p style="color: black">{{user_count[0]}} Recommendations</p>
+            {%endfor%}
         </div>
         {%endfor%}
 
