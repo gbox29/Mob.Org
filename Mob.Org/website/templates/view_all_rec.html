@@ -3,9 +3,21 @@
         <h1 style="float: right; margin-right: 2%;"><a href="/add_recommendation">Add Recommendation</a></h1>
     </div>
 
+    {%for user_rec in recDetailsFive%}
     <div class="view-rec">
-        <div class="rec-pic">1</div>
-        <div class="rec-comment-container">2</div>
+        <div class="item-pic">
+            <img src="{{user_rec[0]}}">
+        </div>
+        {%for rec_details in recDetailsSix%}
+        <div class="item-content">
+            {{rec_details[0]}}
+        </div>
+        <h3 style="position: relative; left: 45%;">{{rec_details[1]}}</h3>
+        {%endfor%}
     </div>
+    {%endfor%}
+
     
+
+
 </div>

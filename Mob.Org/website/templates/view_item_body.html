@@ -15,7 +15,16 @@
         <p style="color: black; text-align: justify; text-indent: 2%; letter-spacing: 2px;">{{itemDetails[9]}}</p>
     </div>
     <div class="view-item-char">
-        characters
+        <div class="char-title">
+            <h1 style="margin-left:1%;">Characters</h1>
+            <h1 style="display: inline; margin-left: 80%;"><a href="/view_all_char">see more</a></h1>
+        </div>
+        {%for char in charDetails%}
+        <div class="char-content">
+            <img src="{{char[2]}}">
+            <p>{{char[1]}},{{char[0]}}</p>
+        </div>
+        {%endfor%}
     </div>
     
     <div class="view-item-review">

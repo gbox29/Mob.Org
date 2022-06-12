@@ -29,11 +29,16 @@ def view_item(id_data):
     session['view_id_data'] = id_data
     revDetails = cur.execute("SELECT * FROM user_review WHERE item_id =%s LIMIT 4",(id_data))
     revDetails = cur.fetchall()
-    recDetailsFour = cur.execute("SELECT poster FROM t_item WHERE id in (SELECT item_id FROM t_recommend WHERE id in (SELECT id FROM t_recommend WHERE id IN (SELECT similar_item_id FROM t_recommend WHERE item_id = %s AND similar_item_id IS NOT NULL) AND similar_item_id IS NULL) AND similar_item_id IS NULL);",(id_data))
+    ##recDetailsFour = cur.execute("SELECT poster FROM t_item WHERE id in (SELECT item_id FROM t_recommend WHERE id in (SELECT id FROM t_recommend WHERE id IN (SELECT similar_item_id FROM t_recommend WHERE item_id = %s AND similar_item_id IS NOT NULL) AND similar_item_id IS NULL) AND similar_item_id IS NULL);",(id_data))
+    ##recDetailsFour = cur.fetchall()
+
+    recDetailsFour = cur.execute("SELECT poster FROM rec_list WHERE id IN (SELECT similar_item_id FROM rec_list WHERE item_id = %s AND similar_item_id IS NOT NULL)",(id_data))
     recDetailsFour = cur.fetchall()
 
+    charDetails = cur.execute("SELECT char_fname, char_lname, char_poster FROM char_item WHERE item_id=%s LIMIT 8",(id_data))
+    charDetails = cur.fetchall()
 
-    recDetails = cur.execute("SELECT count(id) FROM t_recommend WHERE item_id = %s AND similar_item_id IN (SELECT t1.id FROM t_recommend AS t1 LEFT JOIN t_recommend AS t2 ON t1.id = t2.similar_item_id)",(id_data))
+    recDetails = cur.execute("SELECT count(user_id) FROM t_recommend WHERE item_id = %s AND similar_item_id IN (SELECT t1.id FROM t_recommend AS t1 LEFT JOIN t_recommend AS t2 ON t1.id = t2.similar_item_id)",(id_data))
     recDetails = cur.fetchall()
 
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
@@ -61,9 +66,9 @@ def view_item(id_data):
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
-                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails,recDetailsFour=recDetailsFour,recDetails=recDetails)
-            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour)
-        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour)
+                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails,recDetailsFour=recDetailsFour,recDetails=recDetails,charDetails=charDetails)
+            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour,charDetails=charDetails)
+        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour,charDetails=charDetails)
 
 
 @views.route('/view_edit_item',methods=['GET','POST'])
@@ -150,6 +155,10 @@ def view_all_rec():
     cur = mysql.connection.cursor()
     view_all_rec = "true"
     id_data = session['view_id_data']
+    recDetailsFive = cur.execute("SELECT poster FROM rec_list WHERE id IN (SELECT similar_item_id FROM rec_list WHERE item_id = %s AND similar_item_id IS NOT NULL)",(id_data))
+    recDetailsFive = cur.fetchall()
+    recDetailsSix= cur.execute("SELECT r_description,user_name FROM rec_list WHERE item_id = %s AND similar_item_id IS NOT NULL GROUP BY user_name",(id_data))
+    recDetailsSix = cur.fetchall()
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
     if itemDetails:
@@ -161,8 +170,8 @@ def view_all_rec():
             if listDetails:
                 bool_listdetails = "true"
                 return render_template("view_item.html",
-                    view_all_rec=view_all_rec,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
-        return render_template("view_item.html",view_all_rec=view_all_rec,itemDetails=itemDetails)
+                    view_all_rec=view_all_rec,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,recDetailsFive=recDetailsFive,recDetailsSix=recDetailsSix)
+        return render_template("view_item.html",view_all_rec=view_all_rec,itemDetails=itemDetails,recDetailsFive=recDetailsFive,recDetailsSix=recDetailsSix)
 
 @views.route('/add_recommendation',methods=['GET','POST'])
 def add_recommendation():
@@ -175,7 +184,7 @@ def add_recommendation():
         if 'view_id_data' and 'username' and 'user_id' in session:
             user_id = session['user_id']
             username = "username"
-            recDetails = cur.execute("SELECT * FROM rec_list WHERE user_id=%s AND NOT(item_id=%s)",(user_id,id_data))
+            recDetails = cur.execute("SELECT * FROM rec_list WHERE user_id=%s AND NOT(item_id=%s) GROUP BY item_name",(user_id,id_data))
             recDetails = cur.fetchall()
             listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
             listDetails = cur.fetchone()
@@ -185,6 +194,10 @@ def add_recommendation():
         else:
             return render_template("login.html")
         return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username)
+
+@views.route('/view_all_char')
+def view_all_char():
+    return render_template("view_all_char.html")
 
 @views.route('/add_rec',methods=['GET','POST'])
 def add_rec():
