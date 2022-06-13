@@ -47,7 +47,7 @@ def view_item(id_data):
     recDetails = cur.execute("SELECT count(user_id) FROM t_recommend WHERE item_id = %s AND similar_item_id IN (SELECT t1.id FROM t_recommend AS t1 LEFT JOIN t_recommend AS t2 ON t1.id = t2.similar_item_id)",(id_data))
     recDetails = cur.fetchall()
 
-    statsDetails = cur.execute("SELECT count(user_id),ROUND(AVG(rating),2) FROM t_list WHERE item_id = %s",(id_data))
+    statsDetails = cur.execute("SELECT count(user_id), ROUND(AVG(rating),2) FROM t_list WHERE item_id = %s",(id_data))
     statsDetails = cur.fetchone()
 
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
@@ -80,6 +80,7 @@ def view_item(id_data):
                 bool_listdetails = "true"
                 if 'vote_item' in session:
                     vote_item = session['vote_item']
+                    session.pop('vote_item',None)
                     return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails,recDetailsFour=recDetailsFour,recDetails=recDetails,charDetails=charDetails,statsDetails=statsDetails,vote_item=vote_item,itemInfo=itemInfo)
                 return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails,recDetailsFour=recDetailsFour,recDetails=recDetails,charDetails=charDetails,statsDetails=statsDetails,itemInfo=itemInfo)
             return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour,charDetails=charDetails,statsDetails=statsDetails,itemInfo=itemInfo)
@@ -282,13 +283,15 @@ def vote_item():
         cur.execute("""INSERT INTO t_vote_item (user_id, item_id) VALUES (%s,%s)""",(user_id,id_data))
         session['vote_item'] = "true"
         mysql.connection.commit()
-        return redirect(url_for("views.view_item"))
+        return redirect(url_for("views.view_item",id_data = id_data))
     else:
         return redirect(url_for("auth.login"))
 
 @views.route('/profile')
 def profile():
-    return render_template("profile.html")
+    if 'username' and 'user_id' in session:
+        username = "username"
+        return render_template("profile.html",username=username)
 
 ##admin side
 @views.route('/admin_base')
