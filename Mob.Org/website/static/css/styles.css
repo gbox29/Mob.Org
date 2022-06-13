@@ -83,7 +83,7 @@ body{
     grid-template-columns: repeat(3,5%);
 }
 .top-char-pic{
-    grid-column: 2/4;
+    grid-column: 1/4;
 }
 .top-char-info{
     grid-column: 4/6;
@@ -298,12 +298,25 @@ ul {
       bottom: 260px;
 
   }
+  .view-item-details > p{
+    color: black;
+    margin: 2%;
+    margin-bottom: 10%;
+    font-size: 25px;
+  }
+
   .view-item-synopsis{
     grid-column: 2/4;
     grid-row: 1/6;
     display: grid;
     grid-template-rows: repeat(6,10%);
     grid-template-rows: auto;
+  }
+
+  .stats > h1{
+    margin: 2%;
+    position: relative;
+    top: 25%;
   }
   .view-item-synopsis>div{
     border: solid 2px;
@@ -609,4 +622,14 @@ ul {
     height: 100%;
     width: 100%;
     object-fit: fill;
+  }
+
+  .profile{
+    margin: 25%;
+    position: relative;
+  }
+  
+  .profile > p{
+    font-size: 25px;
+    padding-bottom: 30px;
   }

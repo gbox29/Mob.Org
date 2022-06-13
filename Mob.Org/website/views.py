@@ -10,6 +10,12 @@ from . import mysql
 @views.route('/')
 def index():
     cur = mysql.connection.cursor()
+    topChar = cur.execute("SELECT char_id,count(user_id), char_poster, char_fname, char_lname, char_role FROM char_vote GROUP BY char_id ORDER BY count(user_id) DESC LIMIT 3")
+    topChar = cur.fetchall()
+
+    topItem = cur.execute("SELECT item_id,item_name,t_type,demographic,poster,count(user_id) FROM item_vote GROUP BY item_id ORDER BY count(user_id) DESC")
+    topItem = cur.fetchall()
+
     resultValue = cur.execute("SELECT * FROM t_item WHERE id = 1")
     if resultValue > 0:
         userDetails = cur.fetchall()
@@ -18,9 +24,9 @@ def index():
             details = cur.fetchall()
         if 'username' in session:
             username = "username"
-            return render_template("index.html",userDetails=userDetails,details=details,username=username)
+            return render_template("index.html",userDetails=userDetails,details=details,username=username,topChar=topChar,topItem=topItem)
         else:
-            return render_template("index.html",userDetails=userDetails,details=details)
+            return render_template("index.html",userDetails=userDetails,details=details,topChar=topChar,topItem=topItem)
 
 
 @views.route('/view_item/<string:id_data>',methods=['GET','POST'])
@@ -41,8 +47,14 @@ def view_item(id_data):
     recDetails = cur.execute("SELECT count(user_id) FROM t_recommend WHERE item_id = %s AND similar_item_id IN (SELECT t1.id FROM t_recommend AS t1 LEFT JOIN t_recommend AS t2 ON t1.id = t2.similar_item_id)",(id_data))
     recDetails = cur.fetchall()
 
+    statsDetails = cur.execute("SELECT count(user_id),ROUND(AVG(rating),2) FROM t_list WHERE item_id = %s",(id_data))
+    statsDetails = cur.fetchone()
+
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
+
+    itemInfo = cur.execute("SELECT item_name, t_type, episode, date_release, item_source, demographic, duration, direct_fname, direct_lname FROM item_director WHERE item_id = %s",(id_data))
+    itemInfo = cur.fetchone()
     if itemDetails:
         if 'username' and 'user_id' in session:
             username = "username"
@@ -66,9 +78,12 @@ def view_item(id_data):
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
-                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails,recDetailsFour=recDetailsFour,recDetails=recDetails,charDetails=charDetails)
-            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour,charDetails=charDetails)
-        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour,charDetails=charDetails)
+                if 'vote_item' in session:
+                    vote_item = session['vote_item']
+                    return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails,recDetailsFour=recDetailsFour,recDetails=recDetails,charDetails=charDetails,statsDetails=statsDetails,vote_item=vote_item,itemInfo=itemInfo)
+                return render_template("view_item.html",itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,revDetails=revDetails,recDetailsFour=recDetailsFour,recDetails=recDetails,charDetails=charDetails,statsDetails=statsDetails,itemInfo=itemInfo)
+            return render_template("view_item.html",itemDetails=itemDetails,username=username,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour,charDetails=charDetails,statsDetails=statsDetails,itemInfo=itemInfo)
+        return render_template("view_item.html",itemDetails=itemDetails,revDetails=revDetails,recDetails=recDetails,recDetailsFour=recDetailsFour,charDetails=charDetails,statsDetails=statsDetails,itemInfo=itemInfo)
 
 
 @views.route('/view_edit_item',methods=['GET','POST'])
@@ -95,6 +110,10 @@ def view_all_review():
     view_all_review = "true"
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
+
+    itemInfo = cur.execute("SELECT item_name, t_type, episode, date_release, item_source, demographic, duration, direct_fname, direct_lname FROM item_director WHERE item_id = %s",(id_data))
+    itemInfo = cur.fetchone()
+    
     if itemDetails:
         reviewDetails = cur.execute("SELECT * FROM user_review WHERE item_id = %s",(id_data))
         if reviewDetails > 0:
@@ -106,8 +125,8 @@ def view_all_review():
                 listDetails = cur.fetchone()
                 if listDetails:
                     bool_listdetails = "true"
-                    return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,reviewDetails=reviewDetails)
-            return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,reviewDetails=reviewDetails)
+                    return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,reviewDetails=reviewDetails,itemInfo=itemInfo)
+            return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,reviewDetails=reviewDetails,itemInfo=itemInfo)
         else:
             if 'username' and 'user_id' in session:
                 username = "username"
@@ -116,8 +135,8 @@ def view_all_review():
                 listDetails = cur.fetchone()
                 if listDetails:
                     bool_listdetails = "true"
-                    return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
-            return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails)
+                    return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,itemInfo=itemInfo)
+            return render_template("view_item.html",view_all_review=view_all_review,itemDetails=itemDetails,itemInfo=itemInfo)
 
             
 @views.route('/add_review', methods=['GET','POST'])
@@ -161,6 +180,8 @@ def view_all_rec():
     recDetailsSix = cur.fetchall()
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
+    itemInfo = cur.execute("SELECT item_name, t_type, episode, date_release, item_source, demographic, duration, direct_fname, direct_lname FROM item_director WHERE item_id = %s",(id_data))
+    itemInfo = cur.fetchone()
     if itemDetails:
         if 'view_id_data' and 'username' and 'user_id' in session:
             user_id = session['user_id']
@@ -170,8 +191,8 @@ def view_all_rec():
             if listDetails:
                 bool_listdetails = "true"
                 return render_template("view_item.html",
-                    view_all_rec=view_all_rec,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,recDetailsFive=recDetailsFive,recDetailsSix=recDetailsSix)
-        return render_template("view_item.html",view_all_rec=view_all_rec,itemDetails=itemDetails,recDetailsFive=recDetailsFive,recDetailsSix=recDetailsSix)
+                    view_all_rec=view_all_rec,itemDetails=itemDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,recDetailsFive=recDetailsFive,recDetailsSix=recDetailsSix,itemInfo=itemInfo)
+        return render_template("view_item.html",view_all_rec=view_all_rec,itemDetails=itemDetails,recDetailsFive=recDetailsFive,recDetailsSix=recDetailsSix,itemInfo=itemInfo)
 
 @views.route('/add_recommendation',methods=['GET','POST'])
 def add_recommendation():
@@ -180,6 +201,8 @@ def add_recommendation():
     id_data = session['view_id_data']
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
+    itemInfo = cur.execute("SELECT item_name, t_type, episode, date_release, item_source, demographic, duration, direct_fname, direct_lname FROM item_director WHERE item_id = %s",(id_data))
+    itemInfo = cur.fetchone()
     if itemDetails:
         if 'view_id_data' and 'username' and 'user_id' in session:
             user_id = session['user_id']
@@ -190,20 +213,22 @@ def add_recommendation():
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
-                return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
+                return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails,itemInfo=itemInfo)
         else:
             return redirect(url_for("auth.login"))
-        return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username)
+        return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username,itemInfo=itemInfo)
 
 @views.route('/view_all_char')
 def view_all_char():
     cur = mysql.connection.cursor()
     view_all_char = "true"
     id_data = session['view_id_data']
-    charAllDetails = cur.execute("SELECT char_fname, char_lname, char_poster,char_id FROM char_item WHERE item_id=%s LIMIT 8",(id_data))
+    charAllDetails = cur.execute("SELECT char_fname, char_lname, char_poster,char_id,char_role FROM char_item WHERE item_id=%s LIMIT 8",(id_data))
     charAllDetails = cur.fetchall()
     itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
     itemDetails = cur.fetchone()
+    itemInfo = cur.execute("SELECT item_name, t_type, episode, date_release, item_source, demographic, duration, direct_fname, direct_lname FROM item_director WHERE item_id = %s",(id_data))
+    itemInfo = cur.fetchone()
     if itemDetails:
         if 'view_id_data' and 'username' and 'user_id' in session:
             user_id = session['user_id']
@@ -212,8 +237,8 @@ def view_all_char():
             listDetails = cur.fetchone()
             if listDetails:
                 bool_listdetails = "true"
-                return render_template("view_item.html",view_all_char=view_all_char,itemDetails=itemDetails,listDetails=listDetails,username=username,charAllDetails=charAllDetails,bool_listdetails=bool_listdetails)
-    return render_template("view_item.html",view_all_char=view_all_char,itemDetails=itemDetails,charAllDetails=charAllDetails)
+                return render_template("view_item.html",view_all_char=view_all_char,itemDetails=itemDetails,listDetails=listDetails,username=username,charAllDetails=charAllDetails,bool_listdetails=bool_listdetails,itemInfo=itemInfo)
+    return render_template("view_item.html",view_all_char=view_all_char,itemDetails=itemDetails,charAllDetails=charAllDetails,itemInfo=itemInfo)
 
 @views.route('/add_rec',methods=['GET','POST'])
 def add_rec():
@@ -248,6 +273,22 @@ def vote_char(id_data):
     else:
         return redirect(url_for("auth.login"))
 
+@views.route('/vote_item')
+def vote_item():
+    cur = mysql.connection.cursor()
+    id_data = session['view_id_data']
+    if 'view_id_data' and 'username' and 'user_id' in session:
+        user_id = session['user_id']
+        cur.execute("""INSERT INTO t_vote_item (user_id, item_id) VALUES (%s,%s)""",(user_id,id_data))
+        session['vote_item'] = "true"
+        mysql.connection.commit()
+        return redirect(url_for("views.view_item"))
+    else:
+        return redirect(url_for("auth.login"))
+
+@views.route('/profile')
+def profile():
+    return render_template("profile.html")
 
 ##admin side
 @views.route('/admin_base')

@@ -1,6 +1,12 @@
 <div class="view-item-synopsis">
-    <div>
-        stats
+    <div class="stats">
+        <h1>Score: {{statsDetails[1]}} %</h1>
+        <h1 style="margin-left: 25%;"> {{statsDetails[0]}} Overall Users </h1>
+        {% if vote_item == "true" %}
+        <h1 style="margin-left: 29%;"> Already Added </h1>
+        {% else %}
+        <h1 style="margin-left: 25%;"> <a href="/vote_item">Add To My Favorite </a></h1>
+        {% endif %}
     </div>
     <div class="view-item-synop">
         <h1 style="margin-left:1%;">Synopsis</h1>

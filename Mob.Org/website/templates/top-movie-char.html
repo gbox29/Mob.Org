@@ -3,37 +3,15 @@
       <h1>Top Characters</h1>
       <h1 style="margin-left: 350px;"><a href="#">see more</a></h1>
    </div>
+   {%for topchar in topChar%}
    <div class="char-info">
-      <div>
-         1
-      </div>
       <div class="top-char-pic">
-         <img src="https://cdn.myanimelist.net/images/characters/15/88195.jpg">
+         <img src="{{topchar[2]}}">
       </div>
       <div class="top-char-info">
-         3
+         <h1 style="margin: 2%;">{{topchar[4]}},{{topchar[3]}}</h1>
+         <h2 style="color: black; margin: 2%;">{{topchar[1]}} Favorites</h2>
       </div>
    </div>
-   <div class="char-info">
-      <div>
-         1
-      </div>
-      <div class="top-char-pic">
-         <img src="https://cdn.myanimelist.net/images/characters/15/88195.jpg">
-      </div>
-      <div class="top-char-info">
-         3
-      </div>
-   </div>
-   <div class="char-info">
-      <div>
-         1
-      </div>
-      <div class="top-char-pic">
-         <img src="https://cdn.myanimelist.net/images/characters/15/88195.jpg">
-      </div>
-      <div class="top-char-info">
-         3
-      </div>
-   </div>
+   {%endfor%}
 </div>
