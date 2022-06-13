@@ -192,12 +192,28 @@ def add_recommendation():
                 bool_listdetails = "true"
                 return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username,bool_listdetails=bool_listdetails,listDetails=listDetails)
         else:
-            return render_template("login.html")
+            return redirect(url_for("auth.login"))
         return render_template("view_item.html",add_rec=add_rec,itemDetails=itemDetails,recDetails=recDetails,username=username)
 
 @views.route('/view_all_char')
 def view_all_char():
-    return render_template("view_all_char.html")
+    cur = mysql.connection.cursor()
+    view_all_char = "true"
+    id_data = session['view_id_data']
+    charAllDetails = cur.execute("SELECT char_fname, char_lname, char_poster,char_id FROM char_item WHERE item_id=%s LIMIT 8",(id_data))
+    charAllDetails = cur.fetchall()
+    itemDetails = cur.execute("SELECT * FROM t_item WHERE id =%s",(id_data))
+    itemDetails = cur.fetchone()
+    if itemDetails:
+        if 'view_id_data' and 'username' and 'user_id' in session:
+            user_id = session['user_id']
+            username = "username"
+            listDetails = cur.execute("SELECT * FROM t_list WHERE user_id = %s AND item_id =%s",(user_id,id_data))
+            listDetails = cur.fetchone()
+            if listDetails:
+                bool_listdetails = "true"
+                return render_template("view_item.html",view_all_char=view_all_char,itemDetails=itemDetails,listDetails=listDetails,username=username,charAllDetails=charAllDetails,bool_listdetails=bool_listdetails)
+    return render_template("view_item.html",view_all_char=view_all_char,itemDetails=itemDetails,charAllDetails=charAllDetails)
 
 @views.route('/add_rec',methods=['GET','POST'])
 def add_rec():
@@ -220,6 +236,18 @@ def add_rec():
                 return redirect(url_for("views.view_item",id_data = id_data))
             else:
                 return  "error"
+
+@views.route('/vote_char/<string:id_data>')
+def vote_char(id_data):
+    cur = mysql.connection.cursor()
+    if 'view_id_data' and 'username' and 'user_id' in session:
+        user_id = session['user_id']
+        cur.execute("""INSERT INTO t_vote_char (user_id, char_id) VALUES (%s,%s)""",(user_id,id_data))
+        mysql.connection.commit()
+        return redirect(url_for("views.view_all_char"))
+    else:
+        return redirect(url_for("auth.login"))
+
 
 ##admin side
 @views.route('/admin_base')

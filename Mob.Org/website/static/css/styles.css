@@ -296,7 +296,7 @@ ul {
   .view-item-details{
       position: relative;
       bottom: 260px;
-      margin-top: 6%;
+
   }
   .view-item-synopsis{
     grid-column: 2/4;
@@ -555,4 +555,58 @@ ul {
       color: black;
       position: relative;
       bottom: 110%;
+  }
+
+  .char-container{
+    border: solid 2px;
+    grid-column: 2/4;
+    grid-row: 1/4;
+    display: grid;
+    grid-template-rows: repeat(auto,20%);
+    grid-gap: 1em;
+    overflow: hidden;
+    overflow-y: scroll;
+    grid-auto-rows: min-content(200px,auto);
+  }
+
+  .char-container > div{
+    width: 100%;
+    grid-auto-rows: 200px;
+  }
+
+  .char-contain-1{
+    display: grid;
+    grid-template-columns: repeat(9,16%);
+    position: relative;
+    left: 2%;
+    top: 4%;
+  }
+  
+
+
+  .char-info-1{
+    grid-column: 2/6;
+  }
+  
+  .char-info-1 > div{
+    margin: 2%;
+    position: relative;
+    top: 10%;
+  }
+
+  .char-actor-1{
+    margin: 2%;
+    position: relative;
+    top: 15%;
+    height: 50%;
+  }
+
+  .char-image-1{
+    grid-row: 1/2s;
+  }
+  
+  .char-image-1 > img{
+    height: 100%;
+    width: 100%;
+    object-fit: fill;
   }

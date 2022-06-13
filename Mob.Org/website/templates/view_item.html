@@ -24,6 +24,8 @@
                 {%include "view_all_rec.html"%}
                 {% elif add_rec == "true" %}
                 {%include "add_recommendation.html"%}
+                {% elif view_all_char == "true" %}
+                {%include "view_all_char.html"%}
                 {% else %}
                 {%include "view_item_body.html"%}
                 {% endif %}

@@ -1,0 +1,28 @@
+<div class="char-container">
+    {%for char in charAllDetails%}
+    <div class="char-contain-1">
+        <div class="char-image-1">
+           <img src="{{char[2]}}">
+        </div>
+        <div class="char-info-1">
+            <div>
+                <h1>{{char[1]}},{{char[0]}}</h1>
+                <h2 style="color: black;">Main Character</h2>
+                {% if char_favor == "true" %}
+                <h2 style="color: black">Already Added</h2>
+                {% else %}
+                <a href="/vote_char/{{char[3]}}"><h2 style="color: black">Add To Favorite</h2></a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="char-actor-1">
+            <div>
+                <h1>Junko Takeuchi</h1>
+                <h2 style="color: black; position: relative; left: 30%;">Actor</h2>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+
+    
+</div>
